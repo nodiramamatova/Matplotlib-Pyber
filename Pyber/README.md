@@ -89,6 +89,7 @@ pyber_df1.head()
 
 
 ```python
+#Get rid off duplicate cities
 pyber_df1 = pyber_df1.groupby('city').agg({'driver_count': sum, 'type':'first' }).reset_index()
 pyber_df1.head()
 
@@ -327,9 +328,8 @@ pyber_df.head()
 
 
 ```python
-#pyber_df = pyber_df[['city', 'date', 'fare', 'ride_id', 'driver_count', 'type']].sort_values(['city'])
+
 pyber_df = pyber_df[['city', 'date', 'fare', 'ride_id', 'driver_count', 'type']]
-#pyber_df.reset_index(drop=True).head()
 pyber_df.head()
 ```
 
@@ -533,11 +533,12 @@ colors1 = pyber_df_count['type'].apply(lambda x: colors[x]).values
 ```python
 lgnd = plt.scatter(x_axis, y_axis, s=s_value, facecolor=colors1, edgecolors='black',alpha=0.75,label='')
 plt.title('Pyber Ride Sharing Data(2016)')
+fig_size = plt.rcParams["figure.figsize"] = [10,6]
 fig_size[0] = 10
 fig_size[1] = 6
 plt.xlabel('Total Number of Rides (Per City)')
 plt.ylabel('Average Fare ($)')
-plt.rcParams['figure.figsize'] = fig_size
+#plt.rcParams['figure.figsize'] = fig_size
 gold_patch = plt.scatter([],[], marker="o", alpha=0.9,facecolor='gold', edgecolors='black', label='Urban')
 blue_patch = plt.scatter([],[], marker="o", alpha=0.9,facecolor='lightskyblue',edgecolors='black',label='Suburban')
 coral_patch = plt.scatter([],[], marker="o", alpha=0.9,facecolor='lightcoral', edgecolors='black',label='Rural')
@@ -561,13 +562,6 @@ total_fares_by_citytype
 percentage_total_fares_by_citytype
 
 ```
-
-                  fare
-    type              
-    Rural      4255.09
-    Suburban  19317.88
-    Urban     40078.34
-
 
 
 
@@ -610,13 +604,62 @@ plt.show()
 ![png](output_20_0.png)
 
 
+
 ## % of Total Rides by City Type
 
 
 ```python
-total_rides_by_citytype = pyber_df[['type', 'fare']].groupby(['type']).count()
-
+#total_rides_by_citytype = pyber_df[['type', 'fare']].groupby(['type']).count()
+total_rides_by_citytype = pyber_df[['type', 'ride_id']].groupby(['type']).count()
+total_rides_by_citytype
 ```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ride_id</th>
+    </tr>
+    <tr>
+      <th>type</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Rural</th>
+      <td>125</td>
+    </tr>
+    <tr>
+      <th>Suburban</th>
+      <td>625</td>
+    </tr>
+    <tr>
+      <th>Urban</th>
+      <td>1625</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 
 
 ```python
@@ -642,6 +685,7 @@ percentage_of_total_rides_by_citytype
 
 
 ```python
+
 # Labels for the sections of our pie chart
 labels = ['Rural', 'Suburban', 'Urban']
 
@@ -715,3 +759,8 @@ plt.show()
 1.Total number of drivers in urban area is majority (77.8%)
 2.Total rides in urban area is also high (68.4%)
 3.Correspondingly totalfares in this type also very high
+
+
+```python
+
+```
